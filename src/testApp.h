@@ -28,17 +28,24 @@ class testApp : public ofBaseApp{
 		ofBaseVideoDraws * video;
         ofBaseVideoDraws * videoTest;
 		ofxAruco aruco;
-
+        ofxCvContourFinder contour;
         int img_width, img_height;
-        ofxCvColorImage img;
 
+        ofxCvColorImage img;
+        ofxCvColorImage img2;
         ofxCvColorImage hsvImg;
         float hue;
         float sat;
         float bright;
         int tolerance;
+        ofxCvGrayscaleImage grayImg0;
         ofxCvGrayscaleImage grayImg;
+        ofxCvGrayscaleImage grayImg2;
+        ofxCvGrayscaleImage grayImg3;
+        ofxCvGrayscaleImage grayImg4;
+
         ofColor targetColorHsv;
+        ofImage videoImage;
 
         ofxCvGrayscaleImage image;
 };
