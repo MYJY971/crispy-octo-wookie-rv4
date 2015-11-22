@@ -74,12 +74,17 @@ void testApp::update(){
         //img.mirror(false,true);
 
         //img.convertRgbToHsv();
-        hsvImg = img;
+//        hsvImg = img;
+//        hsvImg.convertRgbToHsv();
+
+        grayImg0=img;
+
+        img2=img;
+
+        hsvImg = grayImg0;
         hsvImg.convertRgbToHsv();
 
         grayImg=img;
-        img2=img;
-
 
 
 
@@ -88,7 +93,7 @@ void testApp::update(){
             for (int i=0; i<img_width ; ++i)
             {
 
-                if( ofInRange(hsvImg.getPixelsRef().getColor(i,j).getHue(),0,90))
+                if( ofInRange(hsvImg.getPixelsRef().getColor(i,j).getBrightness(),0,50))
                 {
 
                   grayImg.getPixelsRef().setColor(i,j,ofColor::black);
@@ -99,7 +104,7 @@ void testApp::update(){
 
                 else
                 {
-                  if( ofInRange(hsvImg.getPixelsRef().getColor(i,j).getHue(),150,255))
+                  if( ofInRange(hsvImg.getPixelsRef().getColor(i,j).getBrightness(),150,255))
                       grayImg.getPixelsRef().setColor(i,j,ofColor::black);
                   else
                       grayImg.getPixelsRef().setColor(i,j,ofColor::white);
@@ -110,6 +115,8 @@ void testApp::update(){
 
             }
         }
+
+        grayImg.erode_3x3();
 
         grayImg.flagImageChanged();
 
@@ -158,7 +165,7 @@ void testApp::update(){
 void testApp::draw(){
     ofSetColor(255);
     video->draw(0,0);
-    //grayImg.draw(640,0);
+    grayImg.draw(640,0);
     //img.d
 //    videoImage.draw(0,0);
 
@@ -167,8 +174,8 @@ void testApp::draw(){
     //TODO: draw detected markers and board
 for(int i=0;i<aruco.getNumMarkers();i++){
             aruco.begin(i);
-            ofDrawAxis(0.2);
-            ofDrawPlane(0.15,0.15);
+            //ofDrawAxis(0.2);
+            //ofDrawPlane(0.15,0.15);
 
             //drawMarker(0.15,ofColor::red);
             aruco.end();
@@ -179,7 +186,7 @@ if(aruco.getBoardProbability()>0.2){
         for(int i=0;i<aruco.getNumBoards();i++){
             aruco.beginBoard(i);
             ofSetColor(ofColor::red,75);
-            ofDrawBox(0.5,0.5,0.5);
+            ofDrawBox(0.2,0.2,0.2);
             //videoImage.draw(640,0);
 
             aruco.end();
