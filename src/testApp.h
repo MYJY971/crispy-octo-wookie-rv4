@@ -24,6 +24,7 @@ class testApp : public ofBaseApp{
 
         ofVideoGrabber cam;
 		ofVideoPlayer player;
+        ofMesh mesh;
 
 		ofBaseVideoDraws * video;
         ofBaseVideoDraws * videoTest;
@@ -34,15 +35,10 @@ class testApp : public ofBaseApp{
         ofxCvColorImage img;
         ofxCvColorImage img2;
         ofxCvColorImage hsvImg;
-        float hue;
-        float sat;
-        float bright;
-        int tolerance;
+
         ofxCvGrayscaleImage grayImg0;
         ofxCvGrayscaleImage grayImg;
-        ofxCvGrayscaleImage grayImg2;
-        ofxCvGrayscaleImage grayImg3;
-        ofxCvGrayscaleImage grayImg4;
+
 
         ofColor targetColorHsv;
         ofImage videoImage;

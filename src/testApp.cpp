@@ -2,25 +2,8 @@
 #include "ofxCv.h"
 #include "ofBitmapFont.h"
 
-int tolerance = 30;
 ofxCvBlob theBlob;
 
-//--------------------------------------------------------------
-void drawMarker(float size, const ofColor & color){
-    ofDrawAxis(size);
-    ofPushMatrix();
-        // move up from the center by size*.5
-        // to draw a box centered at that point
-        ofTranslate(0,size*0.5,0);
-        ofFill();
-        ofSetColor(color,50);
-        ofBox(size);
-        ofNoFill();
-        ofSetColor(color);
-        ofBox(size);
-    ofPopMatrix();
-}
-//--------------------------------------------------------------
 void testApp::setup(){
 
     string boardName = "boardConfiguration.yml";
@@ -38,9 +21,7 @@ void testApp::setup(){
     hsvImg.allocate(img_width, img_height);
     grayImg0.allocate(img_width,img_height);
     grayImg.allocate(img_width,img_height);
-    grayImg2.allocate(img_width,img_height);
-    grayImg3.allocate(img_width,img_height);
-    grayImg4.allocate(img_width,img_height);
+
     image.allocate(img_width, img_height);
     videoImage.allocate(img_width, img_height,OF_IMAGE_COLOR);
 
@@ -66,6 +47,26 @@ void testApp::update(){
         ofPixels alphaPixels;
         cam.getTextureReference().readToPixels(pixels);
         alphaPixels.allocate(pixels.getWidth(),pixels.getHeight(),OF_PIXELS_RGBA);
+
+
+        //MESH
+//        mesh.enableColors();
+
+//        mesh.load("hand.ply");
+
+//        ofVec3f centroid = ofVec3f(0., 0., 0.);
+//        for (int i = 0; i < mesh.getVertices().size(); i++){
+//            centroid += mesh.getVertex(i);
+//         }
+//         centroid /= mesh.getVertices().size();
+//        float scale = 1./30.;
+//        for (int i = 0; i < mesh.getVertices().size(); i++){
+
+//        ofVec3f newPos =  mesh.getVertex(i)*scale + ( mesh.getVertex(i) - centroid ) * scale;
+//        mesh.setVertex(i, newPos); // rescale
+//        }
+
+
         // TODO: detect board
         aruco.detectBoards(video->getPixelsRef());
 
@@ -73,13 +74,7 @@ void testApp::update(){
         img.setFromPixels(cam.getPixelsRef());
         //img.mirror(false,true);
 
-        //img.convertRgbToHsv();
-//        hsvImg = img;
-//        hsvImg.convertRgbToHsv();
-
         grayImg0=img;
-
-        img2=img;
 
         hsvImg = grayImg0;
         hsvImg.convertRgbToHsv();
@@ -87,7 +82,7 @@ void testApp::update(){
         grayImg=img;
 
 
-
+        //Seuillage : la zone qu'on souhaite superposé est en blanche, le reste en noir
         for (int j =0; j<img_height; ++j)
         {
             for (int i=0; i<img_width ; ++i)
@@ -120,14 +115,15 @@ void testApp::update(){
 
         grayImg.flagImageChanged();
 
+        //Image occlusion
+
         for (int j =0; j<pixels.getHeight()/*img_height*/; ++j)
         {
             for (int i=0; i<pixels.getWidth()/*img_width*/ ; ++i)
             {
 
                 if(grayImg.getPixelsRef().getColor(i,j)==ofColor::black)
-                {//ofSetColor(255, 255, 255, 0);
-                 //img2.getPixelsRef().setColor(i,j,ofColor(0,0,0,0));
+                {
                     ofColor ct= ofColor(0,0,0,0);
                     alphaPixels.setColor(i,j,ct);
 
@@ -139,22 +135,11 @@ void testApp::update(){
                     alphaPixels.setColor(i,j,c);
 
                 }
-//                ofColor c=ofColor(0,255,255,70);
-//                alphaPixels.setColor(i,j,c);
+
             }
         }
 
 
-
-//        for(int i=0;i<aruco.getNumMarkers();i++){
-//                    aruco.begin(i);
-
-//                    aruco.end();
-//                }
-
-
-
-        //img2.setFromPixels(alphaPixels);
         videoImage.setFromPixels(alphaPixels);
 
     }
@@ -166,18 +151,14 @@ void testApp::draw(){
     ofSetColor(255);
     video->draw(0,0);
     grayImg.draw(640,0);
-    //img.d
-//    videoImage.draw(0,0);
 
-    //videoTest->draw(0,0);
 
     //TODO: draw detected markers and board
 for(int i=0;i<aruco.getNumMarkers();i++){
             aruco.begin(i);
-            //ofDrawAxis(0.2);
+            ofDrawAxis(0.2);
             //ofDrawPlane(0.15,0.15);
 
-            //drawMarker(0.15,ofColor::red);
             aruco.end();
         }
 
@@ -187,8 +168,7 @@ if(aruco.getBoardProbability()>0.2){
             aruco.beginBoard(i);
             ofSetColor(ofColor::red,75);
             ofDrawBox(0.2,0.2,0.2);
-            //videoImage.draw(640,0);
-
+            //mesh.draw();
             aruco.end();
         }
     }
