@@ -167,7 +167,7 @@ if(aruco.getBoardProbability()>0.2){
         for(int i=0;i<aruco.getNumBoards();i++){
             aruco.beginBoard(i);
             ofSetColor(ofColor::red,75);
-            ofDrawBox(0.2,0.2,0.2);
+            ofDrawBox(0.5,0.5,0.5);
             //mesh.draw();
             aruco.end();
         }
